@@ -5,42 +5,34 @@ pipeline {
         stage('Get System Information') {
             steps {
                 script {
-                    def run_command(String command) {
-                        def process = command.execute()
-                        process.waitFor()
-                        def output = process.text
-                        process.destroy()
-                        return output.trim()
-                    }
-                    
                     def get_system_info() {
                         def system_info = [:]
                         
-                        def host_name = run_command('scutil --get ComputerName')
+                        def host_name = sh(returnStdout: true, script: 'scutil --get ComputerName').trim()
                         system_info['Host Name'] = host_name
                         
                         def os_name = sh(returnStdout: true, script: 'uname -s').trim()
                         def os_version = sh(returnStdout: true, script: 'sw_vers -productVersion').trim()
-                        def os_build = run_command('sw_vers -buildVersion')
+                        def os_build = sh(returnStdout: true, script: 'sw_vers -buildVersion').trim()
                         def os_manufacturer = "Apple"
                         system_info['OS Name'] = os_name
                         system_info['OS Version'] = os_version
                         system_info['OS Build'] = os_build
                         system_info['OS Manufacturer'] = os_manufacturer
                         
-                        def processor_name = run_command('sysctl -n machdep.cpu.brand_string')
+                        def processor_name = sh(returnStdout: true, script: 'sysctl -n machdep.cpu.brand_string').trim()
                         system_info['Processor'] = processor_name
                         
-                        def memory_info = run_command('sysctl -n hw.memsize')
+                        def memory_info = sh(returnStdout: true, script: 'sysctl -n hw.memsize').trim()
                         system_info['Memory'] = memory_info
                         
-                        def disk_info = run_command('diskutil list')
+                        def disk_info = sh(returnStdout: true, script: 'diskutil list').trim()
                         system_info['Disk Information'] = disk_info
                         
-                        def network_interfaces = run_command('ifconfig -a')
+                        def network_interfaces = sh(returnStdout: true, script: 'ifconfig -a').trim()
                         system_info['Network Interfaces'] = network_interfaces
                         
-                        def graphics_info = run_command('system_profiler SPDisplaysDataType')
+                        def graphics_info = sh(returnStdout: true, script: 'system_profiler SPDisplaysDataType').trim()
                         system_info['Graphics Information'] = graphics_info
                         
                         return system_info
