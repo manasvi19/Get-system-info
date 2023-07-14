@@ -1,52 +1,15 @@
 pipeline {
-    agent any
-
-    stages {
-        stage('Get System Information') {
-            steps {
-                script {
-                    def get_system_info() {
-                        def system_info = [:]
-                        
-                        def host_name = sh(script: 'scutil --get ComputerName', returnStdout: true).trim()
-                        system_info['Host Name'] = host_name
-                        
-                        def os_name = sh(script: 'uname -s', returnStdout: true).trim()
-                        def os_version = sh(script: 'sw_vers -productVersion', returnStdout: true).trim()
-                        def os_build = sh(script: 'sw_vers -buildVersion', returnStdout: true).trim()
-                        def os_manufacturer = "Apple"
-                        system_info['OS Name'] = os_name
-                        system_info['OS Version'] = os_version
-                        system_info['OS Build'] = os_build
-                        system_info['OS Manufacturer'] = os_manufacturer
-                        
-                        def processor_name = sh(script: 'sysctl -n machdep.cpu.brand_string', returnStdout: true).trim()
-                        system_info['Processor'] = processor_name
-                        
-                        def memory_info = sh(script: 'sysctl -n hw.memsize', returnStdout: true).trim()
-                        system_info['Memory'] = memory_info
-                        
-                        def disk_info = sh(script: 'diskutil list', returnStdout: true).trim()
-                        system_info['Disk Information'] = disk_info
-                        
-                        def network_interfaces = sh(script: 'ifconfig -a', returnStdout: true).trim()
-                        system_info['Network Interfaces'] = network_interfaces
-                        
-                        def graphics_info = sh(script: 'system_profiler SPDisplaysDataType', returnStdout: true).trim()
-                        system_info['Graphics Information'] = graphics_info
-                        
-                        return system_info
-                    }
-
-                    def system_info = get_system_info()
-                    for (def key in system_info.keySet()) {
-                        echo "${key}:"
-                        echo system_info[key]
-                        echo '-' * 50
-                    }
-                }
-            }
-        }
+  agent any
+  stages {
+    stage('version') {
+      steps {
+        sh 'python3 --version'
+      }
     }
+    stage('hello') {
+      steps {
+        sh 'python3 get system info.py'
+      }
+    }
+  }
 }
-
