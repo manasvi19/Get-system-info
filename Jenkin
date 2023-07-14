@@ -5,9 +5,12 @@ pipeline {
         stage('Get System Information') {
             steps {
                 script {
-                    def run_command(command) {
-                        def process = sh(returnStdout: true, script: command)
-                        return process.trim()
+                    def run_command(String command) {
+                        def process = command.execute()
+                        process.waitFor()
+                        def output = process.text
+                        process.destroy()
+                        return output.trim()
                     }
                     
                     def get_system_info() {
