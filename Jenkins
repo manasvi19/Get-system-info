@@ -1,15 +1,56 @@
 pipeline {
-  agent any
-  stages {
-    stage('version') {
-      steps {
-        sh 'python3 --version'
-      }
+    agent any
+    
+    stages {
+        stage('Get System Information') {
+            steps {
+                script {
+                    def run_command(command) {
+                        def process = sh(returnStdout: true, script: command)
+                        return process.trim()
+                    }
+                    
+                    def get_system_info() {
+                        def system_info = [:]
+                        
+                        def host_name = run_command('scutil --get ComputerName')
+                        system_info['Host Name'] = host_name
+                        
+                        def os_name = sh(returnStdout: true, script: 'uname -s').trim()
+                        def os_version = sh(returnStdout: true, script: 'sw_vers -productVersion').trim()
+                        def os_build = run_command('sw_vers -buildVersion')
+                        def os_manufacturer = "Apple"
+                        system_info['OS Name'] = os_name
+                        system_info['OS Version'] = os_version
+                        system_info['OS Build'] = os_build
+                        system_info['OS Manufacturer'] = os_manufacturer
+                        
+                        def processor_name = run_command('sysctl -n machdep.cpu.brand_string')
+                        system_info['Processor'] = processor_name
+                        
+                        def memory_info = run_command('sysctl -n hw.memsize')
+                        system_info['Memory'] = memory_info
+                        
+                        def disk_info = run_command('diskutil list')
+                        system_info['Disk Information'] = disk_info
+                        
+                        def network_interfaces = run_command('ifconfig -a')
+                        system_info['Network Interfaces'] = network_interfaces
+                        
+                        def graphics_info = run_command('system_profiler SPDisplaysDataType')
+                        system_info['Graphics Information'] = graphics_info
+                        
+                        return system_info
+                    }
+                    
+                    def system_info = get_system_info()
+                    for (def key in system_info.keySet()) {
+                        echo "${key}:"
+                        echo system_info[key]
+                        echo '-' * 50
+                    }
+                }
+            }
+        }
     }
-    stage('hello') {
-      steps {
-        sh 'python3 hello.py'
-      }
-    }
-  }
 }
