@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 # coding: utf-8
-
 import platform
 import subprocess
-import re
+
 
 # Function to run a shell command and return the output
 def run_command(command):
@@ -24,6 +23,7 @@ def get_system_info():
     os_version = platform.mac_ver()[0]
     os_build = run_command('sw_vers -buildVersion')
     os_manufacturer = platform.system()
+    print("OS Manufacturer:", os_manufacturer)
     system_info['OS Name'] = os_name
     system_info['OS Version'] = os_version
     system_info['OS Build'] = os_build
@@ -45,20 +45,22 @@ def get_system_info():
     system_info['Available Memory'] = f'{available_memory_gb} GB'
     
     # Get disk information
-    disk_info_output = run_command('diskutil list')
-    disk_info_lines = disk_info_output.split('\n')
+    disk_info = run_command('diskutil list')
+    disk_list_output = disk_info.split('\n')
 
+    # Find the lines containing disk information
+    disk_lines = [line for line in disk_list_output if 'APFS' in line or 'FAT32' in line]
+
+    # Extract disk details
     disk_details = []
-    for line in disk_info_lines:
-        if 'Apple_APFS' in line or 'FAT32' in line:
-            line_parts = line.split()
-            if len(line_parts) >= 3:
-                disk_name = line_parts[1]
-                disk_size = line_parts[2]
-                disk_details.append(f"Disk {disk_name}: Size {disk_size}")
+    for line in disk_lines:
+        line_parts = line.split()
+        if len(line_parts) >= 9:
+            disk_name = line_parts[1]
+            disk_size = line_parts[2]
+            disk_details.append(f"Disk {disk_name}: Size {disk_size}")
 
-    disk_info = '\n'.join(disk_details)
-    system_info['Disk Information'] = disk_info
+    system_info['Disk Information'] = '\n'.join(disk_details)
     
     # Get network interfaces
     network_interfaces = run_command('ifconfig -a')
@@ -69,13 +71,12 @@ def get_system_info():
     network_cards = network_cards_output.split('\n')
     formatted_network_cards = '\n'.join(network_cards)
     system_info['Network Cards'] = formatted_network_cards
-    
+
     return system_info
 
 # Get and print system information
 system_info = get_system_info()
-for key, value in system_info.items():
-    print(f'{key}:')
-    print(value)
-    print('-' * 50)
-
+disk_info = system_info['Disk Information']
+print('Disk Information:')
+print(disk_info)
+print('-' * 50)
