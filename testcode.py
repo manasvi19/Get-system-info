@@ -50,16 +50,8 @@ def get_system_info():
     system_info['IP Addresses'] = ip_addresses
     network_cards_output = run_command('networksetup -listallhardwareports')
     network_cards = network_cards_output.split('\n')
-    formatted_network_cards = []
+    system_info['Network Cards'] = network_cards
     
-    for i in range(len(network_cards)):
-        if i + 2 < len(network_cards):
-            hardware_port = network_cards[i].split(': ')[1]
-            device = network_cards[i+1].split(': ')[1]
-            ethernet_address = network_cards[i+2].split(': ')[1]
-            formatted_network_cards.append(f"Hardware Port: {hardware_port}\nDevice: {device}\nEthernet Address: {ethernet_address}\n")
-    system_info['Network Cards'] = formatted_network_cards
-
     
     
     # Get graphics information
