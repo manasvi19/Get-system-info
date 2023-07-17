@@ -51,4 +51,4 @@ def run_command(command):
                   table.add_row(["Network Interfaces", network_interfaces])
 
                   print(table)
-                    """
+   
