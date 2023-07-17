@@ -88,7 +88,6 @@ def get_system_info():
     return system_info
 
 # Get and print system information
-system_info = get_system_info()
 for key, value in system_info.items():
     print(f'{key}:')
     if key == 'Disk Usage':
@@ -98,12 +97,10 @@ for key, value in system_info.items():
             print(f'Available: {disk["Available"]}')
             print('-' * 50)
     elif key == 'Network Cards':
-        print(f'Total Network Cards: {len(value)}')
-        for card in value:
-            print(f'Network Card: {card}')
-            print('-' * 50)
-        for network_card, ip_address in value.items():
+        network_cards = dict(value)
+        for network_card, ip_address in network_cards.items():
             print(f'{network_card}: {ip_address}')
+        print('-' * 50)
     else:
         print(value)
         print('-' * 50)
