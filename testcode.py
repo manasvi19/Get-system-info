@@ -60,7 +60,8 @@ def get_system_info():
             disk_details.append(f"Disk {disk_name}: Space Used: {space_used}, Space Left: {space_left}")
 
     system_info['Disk Information'] = '\n'.join(disk_details)'''
-    
+
+
     # Get network interfaces
     network_interfaces = run_command('ifconfig -a')
     ip_addresses_output = run_command('ifconfig | grep "inet " | awk \'{print $2}\'')
