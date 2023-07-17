@@ -40,10 +40,10 @@ def get_system_info():
     system_info['Memory'] = memory_info
     
     # Get disk information
-    #disk_info = run_command('diskutil list')
-    #system_info['Disk Information'] = disk_info
-
     disk_info = run_command('diskutil list')
+    system_info['Disk Information'] = disk_info
+
+'''disk_info = run_command('diskutil list')
     disk_list_output = disk_info.split('\n')
 
     # Find the lines containing disk information
@@ -59,7 +59,7 @@ def get_system_info():
             space_left = line_parts[8]
             disk_details.append(f"Disk {disk_name}: Space Used: {space_used}, Space Left: {space_left}")
 
-    system_info['Disk Information'] = '\n'.join(disk_details)
+    system_info['Disk Information'] = '\n'.join(disk_details)'''
     
     # Get network interfaces
     network_interfaces = run_command('ifconfig -a')
