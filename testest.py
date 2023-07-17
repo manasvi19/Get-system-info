@@ -41,12 +41,10 @@ def get_system_info():
     total_memory_gb = round(total_memory_bytes / (1024 ** 3), 2)
     system_info['Total Memory'] = f'{total_memory_gb} GB'
     
-    available_memory_output = run_command('sysctl -n vm.stats.vm.v_page_count')
-    available_memory_pages = re.findall(r'\d+', available_memory_output)
-    if available_memory_pages:
-        available_memory_bytes = int(available_memory_pages[0]) * 4096
-        available_memory_gb = round(available_memory_bytes / (1024 ** 3), 2)
-        system_info['Available Memory'] = f'{available_memory_gb} GB'
+    available_memory_output = run_command('sysctl -n hw.memsize')
+    available_memory_bytes = int(available_memory_output)
+    available_memory_gb = round(available_memory_bytes / (1024 ** 3), 2)
+    system_info['Available Memory'] = f'{available_memory_gb} GB'
     
     # Get disk information
     disk_info = run_command('diskutil list')
