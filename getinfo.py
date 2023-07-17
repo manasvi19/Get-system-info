@@ -55,8 +55,7 @@ def get_system_info():
     # Get graphics information
     graphics_info = run_command('system_profiler SPDisplaysDataType')
     system_info['Graphics Information'] = graphics_info
-    
-    # Add any additional system information you'd like to retrieve
+
     
     return system_info
 
