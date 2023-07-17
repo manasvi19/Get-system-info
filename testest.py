@@ -47,8 +47,28 @@ def get_system_info():
     system_info['Available Memory'] = f'{available_memory_gb} GB'
     
     # Get disk information
-    disk_info = run_command('diskutil list')
-    system_info['Disk Information'] = disk_info
+    def get_disk_info():
+    disk_info = []
+    
+    # Get disk list
+    disk_list_output = run_command('diskutil list')
+    disk_list_lines = disk_list_output.split('\n')
+    
+    # Find the disks with their sizes
+    for line in disk_list_lines:
+        if 'disk' in line:
+            line_parts = line.split()
+            if len(line_parts) > 3:
+                disk_name = line_parts[0]
+                disk_size = line_parts[2]
+                disk_info.append(f"Disk {disk_name}: Size {disk_size}")
+    
+    return disk_info
+
+    # Get and print disk information
+    disk_info = get_disk_info()
+    for disk in disk_info:
+        print(disk)
 
     # Get network interfaces
     network_interfaces = run_command('ifconfig -a')
