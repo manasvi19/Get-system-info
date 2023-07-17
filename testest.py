@@ -11,6 +11,37 @@ def run_command(command):
     output, _ = process.communicate()
     return output.decode('utf-8').strip()
 
+# Function to get disk usage
+def get_disk_usage():
+    df_output = run_command('df -h')
+    df_lines = df_output.split('\n')[1:]
+    
+    disk_usage = []
+    for line in df_lines:
+        parts = line.split()
+        if len(parts) >= 5:
+            filesystem = parts[0]
+            size = parts[1]
+            used = parts[2]
+            available = parts[3]
+            percentage_used = parts[4]
+            
+            # Handle the case when the percentage used is not in a recognized format
+            try:
+                percentage = float(percentage_used.strip('%'))
+            except ValueError:
+                percentage = 0.0
+            
+            disk_usage.append({
+                'Filesystem': filesystem,
+                'Size': size,
+                'Used': used,
+                'Available': available,
+                'Percentage Used': percentage
+            })
+    
+    return disk_usage
+
 # Function to get network cards and their IP addresses
 def get_network_cards():
     network_cards_output = run_command('networksetup -listallhardwareports')
