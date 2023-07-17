@@ -42,6 +42,21 @@ def get_disk_usage():
     
     return disk_usage
 
+# Function to get network cards and their IP addresses
+def get_network_cards():
+    network_cards_output = run_command('networksetup -listallhardwareports')
+    network_cards_lines = network_cards_output.split('\n')
+    network_cards = []
+    for line in network_cards_lines:
+        if line.startswith('Hardware Port:'):
+            network_card = line.split(':')[1].strip()
+            network_cards.append(network_card)
+    
+    ip_addresses_output = run_command('ifconfig | grep "inet " | awk \'{print $2}\'')
+    ip_addresses = ip_addresses_output.split('\n')
+    
+    return network_cards, ip_addresses
+
 # Get system information
 def get_system_info():
     system_info = {}
