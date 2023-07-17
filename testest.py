@@ -48,7 +48,7 @@ def get_system_info():
     
     # Get disk information
     def get_disk_info():
-    disk_info = []
+        disk_info = []
     
         # Get disk list
         disk_list_output = run_command('diskutil list')
