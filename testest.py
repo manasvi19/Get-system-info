@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 # coding: utf-8
+
 import platform
 import subprocess
+import re
 
 
 # Function to run a shell command and return the output
@@ -22,6 +24,7 @@ def get_system_info():
     os_name = platform.system()
     os_version = platform.mac_ver()[0]
     os_build = run_command('sw_vers -buildVersion')
+    #os_manufacturer = "Apple"
     os_manufacturer = platform.system()
     print("OS Manufacturer:", os_manufacturer)
     system_info['OS Name'] = os_name
@@ -34,34 +37,14 @@ def get_system_info():
     system_info['Processor'] = processor_name
     
     # Get memory information
-    total_memory_output = run_command('sysctl -n hw.memsize')
-    total_memory_bytes = int(total_memory_output)
-    total_memory_gb = round(total_memory_bytes / (1024 ** 3), 2)
-    system_info['Total Memory'] = f'{total_memory_gb} GB'
-    
-    available_memory_output = run_command('sysctl -n hw.memsize')
-    available_memory_bytes = int(available_memory_output)
-    available_memory_gb = round(available_memory_bytes / (1024 ** 3), 2)
-    system_info['Available Memory'] = f'{available_memory_gb} GB'
+    memory_info = run_command('sysctl -n hw.memsize')
+    system_info['Memory'] = memory_info
     
     # Get disk information
     disk_info = run_command('diskutil list')
-    disk_list_output = disk_info.split('\n')
+    system_info['Disk Information'] = disk_info
 
-    # Find the lines containing disk information
-    disk_lines = [line for line in disk_list_output if 'APFS' in line or 'FAT32' in line]
 
-    # Extract disk details
-    disk_details = []
-    for line in disk_lines:
-        line_parts = line.split()
-        if len(line_parts) >= 9:
-            disk_name = line_parts[1]
-            disk_size = line_parts[2]
-            disk_details.append(f"Disk {disk_name}: Size {disk_size}")
-
-    system_info['Disk Information'] = '\n'.join(disk_details)
-    
     # Get network interfaces
     network_interfaces = run_command('ifconfig -a')
     ip_addresses_output = run_command('ifconfig | grep "inet " | awk \'{print $2}\'')
@@ -72,11 +55,12 @@ def get_system_info():
     formatted_network_cards = '\n'.join(network_cards)
     system_info['Network Cards'] = formatted_network_cards
 
+    
     return system_info
 
 # Get and print system information
 system_info = get_system_info()
-disk_info = system_info['Disk Information']
-print('Disk Information:')
-print(disk_info)
-print('-' * 50)
+for key, value in system_info.items():
+    print(f'{key}:')
+    print(value)
+    print('-' * 50)
