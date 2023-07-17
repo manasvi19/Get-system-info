@@ -42,21 +42,6 @@ def get_disk_usage():
     
     return disk_usage
 
-# Function to get network cards and their IP addresses
-def get_network_cards():
-    network_cards_output = run_command('networksetup -listallhardwareports')
-    network_cards_lines = network_cards_output.split('\n')
-    network_cards = []
-    for line in network_cards_lines:
-        if line.startswith('Hardware Port:'):
-            network_card = line.split(':')[1].strip()
-            network_cards.append(network_card)
-    
-    ip_addresses_output = run_command('ifconfig | grep "inet " | awk \'{print $2}\'')
-    ip_addresses = ip_addresses_output.split('\n')
-    
-    return network_cards, ip_addresses
-
 # Get system information
 def get_system_info():
     system_info = {}
@@ -82,32 +67,35 @@ def get_system_info():
     # Get memory information
     memory_info = run_command('sysctl -n hw.memsize')
     system_info['Memory'] = memory_info
-
-   # Get disk usage information
+    
+    # Get disk information
+    disk_info = run_command('diskutil list')
+    system_info['Disk Information'] = disk_info
+    
+    # Get disk usage information
     disk_usage = get_disk_usage()
     system_info['Disk Usage'] = disk_usage
     
-    # Get disk information
-    #disk_info = run_command('diskutil list')
-    #system_info['Disk Information'] = disk_info
-    
-    # Get network cards and their IP addresses
-    network_cards, ip_addresses = get_network_cards()
-    system_info['Network Cards'] = network_cards
+    # Get network interfaces
+    network_interfaces = run_command('ifconfig -a')
+    ip_addresses_output = run_command('ifconfig | grep "inet " | awk \'{print $2}\'')
+    ip_addresses = ip_addresses_output.split('\n')
     system_info['IP Addresses'] = ip_addresses
-    
+    network_cards_output = run_command('networksetup -listallhardwareports')
+    network_cards = network_cards_output.split('\n')
+    formatted_network_cards = '\n'.join(network_cards)
+    system_info['Network Cards'] = formatted_network_cards
+
     return system_info
 
 # Get and print system information
 system_info = get_system_info()
 for key, value in system_info.items():
     print(f'{key}:')
-    if key == 'Network Cards':
-        print(f'Total Network Cards: {len(value)}')
-    elif key == 'IP Addresses':
-        for ip_address in value:
-            print(ip_address)
+    if key == 'Disk Usage':
+        for disk in value:
+            print('\n'.join(f'{k}: {v}' for k, v in disk.items()))
+            print('-' * 50)
     else:
         print(value)
-    print('-' * 50)
-
+        print('-' * 50)
