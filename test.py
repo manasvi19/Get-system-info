@@ -33,6 +33,7 @@ def get_disk_usage():
                 percentage = 0.0
             
             disk_usage.append({
+                'Filesystem': filesystem,
                 'Size': size,
                 'Used': used,
                 'Available': available
@@ -98,9 +99,11 @@ for key, value in system_info.items():
     print(f'{key}:')
     if key == 'Disk Usage':
         for disk in value:
+            print(f'Filesystem: {disk["Filesystem"]}')
             print(f'Used: {disk["Used"]}')
             print(f'Available: {disk["Available"]}')
             print('-' * 50)
     else:
         print(value)
         print('-' * 50)
+
