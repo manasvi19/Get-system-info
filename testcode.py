@@ -52,12 +52,12 @@ def get_system_info():
     network_cards = network_cards_output.split('\n')
     formatted_network_cards = []
     
-    for i in range(1, len(network_cards), 4):
-        hardware_port = network_cards[i].split(': ')[1]
-        device = network_cards[i+1].split(': ')[1]
-        ethernet_address = network_cards[i+2].split(': ')[1]
-        formatted_network_cards.append(f"Hardware Port: {hardware_port}\nDevice: {device}\nEthernet Address: {ethernet_address}\n")
-        
+    for i in range(len(network_cards)):
+        if i + 2 < len(network_cards):
+            hardware_port = network_cards[i].split(': ')[1]
+            device = network_cards[i+1].split(': ')[1]
+            ethernet_address = network_cards[i+2].split(': ')[1]
+            formatted_network_cards.append(f"Hardware Port: {hardware_port}\nDevice: {device}\nEthernet Address: {ethernet_address}\n")
     system_info['Network Cards'] = formatted_network_cards
 
     
