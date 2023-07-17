@@ -25,23 +25,15 @@ def get_disk_usage():
             size = parts[1]
             used = parts[2]
             available = parts[3]
-            percentage_used = parts[4]
-            
-            # Handle the case when the percentage used is not in a recognized format
-            try:
-                percentage = float(percentage_used.strip('%'))
-            except ValueError:
-                percentage = 0.0
             
             disk_usage.append({
                 'Filesystem': filesystem,
-                'Size': size,
                 'Used': used,
-                'Available': available,
-                'Percentage Used': percentage
+                'Available': available
             })
     
     return disk_usage
+
 
 # Function to get network cards and their IP addresses
 def get_network_cards():
@@ -92,7 +84,7 @@ def get_system_info():
     network_cards, ip_addresses = get_network_cards()
     system_info['Network Cards'] = network_cards
     system_info['IP Addresses'] = ip_addresses
-    
+
     return system_info
 
 # Get and print system information
@@ -101,14 +93,15 @@ for key, value in system_info.items():
     print(f'{key}:')
     if key == 'Disk Usage':
         for disk in value:
-            print('\n'.join(f'{k}: {v}' for k, v in disk.items()))
+            print(f'Filesystem: {disk["Filesystem"]}')
+            print(f'Used: {disk["Used"]}')
+            print(f'Available: {disk["Available"]}')
             print('-' * 50)
     elif key == 'Network Cards':
         print(f'Total Network Cards: {len(value)}')
         for card in value:
-            print(card)
+            print(f'Network Card: {card}')
         print('-' * 50)
     else:
         print(value)
         print('-' * 50)
-
