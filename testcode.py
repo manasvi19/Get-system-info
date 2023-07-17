@@ -55,8 +55,8 @@ def get_system_info():
     for line in network_cards:
         if line.strip() == "VLAN Configurations":
             is_vlan_section = True
-        elif not is_vlan_section
-        formatted_network_cards.append(line)
+        elif not is_vlan_section:
+            formatted_network_cards.append(line)
         
         formatted_network_cards = '\n'.join(formatted_network_cards)
         system_info['Network Cards'] = formatted_network_cards
