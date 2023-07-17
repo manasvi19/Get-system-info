@@ -112,4 +112,4 @@ for key, value in system_info.items():
             print(card)
     else:
         print(value)
-    print('-' * 50)
+    print('---' * 50)
