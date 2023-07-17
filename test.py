@@ -54,6 +54,9 @@ def get_network_cards():
     ip_addresses_output = run_command('ifconfig | grep "inet " | awk \'{print $2}\'')
     ip_addresses = ip_addresses_output.split('\n')
     
+    # Print the number of network cards
+    print('Total Network Cards:', len(network_cards))
+    
     return network_cards, ip_addresses
 
 # Get system information
@@ -103,8 +106,10 @@ for key, value in system_info.items():
             print(f'Used: {disk["Used"]}')
             print(f'Available: {disk["Available"]}')
             print('-' * 50)
+    elif key == 'Network Cards':
+        print(f'Total Network Cards: {len(value)}')
+        for card in value:
+            print(card)
     else:
         print(value)
-        print('-' * 50)
-
-
+    print('-' * 50)
