@@ -45,7 +45,6 @@ def get_system_info():
     
     # Get network interfaces
     network_interfaces = run_command('ifconfig -a')
-    system_info['Network Interfaces'] = network_interfaces
     ip_addresses_output = run_command('ifconfig | grep "inet " | awk \'{print $2}\'')
     ip_addresses = ip_addresses_output.split('\n')
     system_info['IP Addresses'] = ip_addresses
