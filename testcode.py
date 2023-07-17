@@ -57,8 +57,8 @@ def get_system_info():
         device = network_cards[i+1].split(': ')[1]
         ethernet_address = network_cards[i+2].split(': ')[1]
         formatted_network_cards.append(f"Hardware Port: {hardware_port}\nDevice: {device}\nEthernet Address: {ethernet_address}\n")
-
-system_info['Network Cards'] = formatted_network_cards
+        
+    system_info['Network Cards'] = formatted_network_cards
 
     
     
