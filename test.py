@@ -129,6 +129,7 @@ for key, value in system_info.items():
             print(f'Available: {disk["Available"]}')
             print('-' * 50)
     elif key == 'Network Cards':
+        print(f'Total Network Cards: {len(value)}')
         for network_card, ip_address in value:
             print(f'{network_card}: {ip_address}')
         print('-' * 50)
