@@ -46,7 +46,7 @@ def get_network_cards():
             network_cards.append(network_card)
 
     total_network_cards = len(network_cards)
-    return network_cards, total_network_cards, ip_addresses
+    return network_cards, total_network_cards
 
 '''# Get system information
 def get_system_info():
