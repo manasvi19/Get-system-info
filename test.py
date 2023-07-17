@@ -117,8 +117,7 @@ system_info['Disk Usage'] = disk_usage
 
 # Get network cards and their IP addresses
 network_cards, ip_addresses = get_network_cards()
-system_info['Network Cards'] = network_cards
-system_info['IP Addresses'] = ip_addresses
+system_info['Network Cards'] = list(zip(network_cards, ip_addresses))
 
 # Get and print system information
 for key, value in system_info.items():
@@ -130,27 +129,7 @@ for key, value in system_info.items():
             print(f'Available: {disk["Available"]}')
             print('-' * 50)
     elif key == 'Network Cards':
-        network_cards = dict(value)
-        for network_card, ip_address in network_cards.items():
-            print(f'{network_card}: {ip_address}')
-        print('-' * 50)
-    else:
-        print(value)
-        print('-' * 50)
-
-
-# Get and print system information
-for key, value in system_info.items():
-    print(f'{key}:')
-    if key == 'Disk Usage':
-        for disk in value:
-            print(f'Filesystem: {disk["Filesystem"]}')
-            print(f'Used: {disk["Used"]}')
-            print(f'Available: {disk["Available"]}')
-            print('-' * 50)
-    elif key == 'Network Cards':
-        network_cards = dict(value)
-        for network_card, ip_address in network_cards.items():
+        for network_card, ip_address in value:
             print(f'{network_card}: {ip_address}')
         print('-' * 50)
     else:
