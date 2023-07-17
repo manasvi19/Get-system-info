@@ -11,6 +11,39 @@ def run_command(command):
     output, _ = process.communicate()
     return output.decode('utf-8').strip()
 
+# Get disk information
+disk_list_output = run_command('diskutil list')
+disk_list_lines = disk_list_output.split('\n')
+
+# Find the disk with the highest usage
+highest_usage_disk = None
+highest_usage_value = -1
+
+for line in disk_list_lines:
+    if 'Apple_APFS' in line:
+        line_parts = line.split()
+        if len(line_parts) > 3:
+            usage_percentage = line_parts[-2].replace('%', '')
+            try:
+                usage_value = int(usage_percentage)
+                if usage_value > highest_usage_value:
+                    highest_usage_value = usage_value
+                    highest_usage_disk = line_parts[1]
+            except ValueError:
+                continue
+
+# Get space available for the highest usage disk
+if highest_usage_disk:
+    disk_info_output = run_command(f'diskutil info {highest_usage_disk}')
+    disk_info_lines = disk_info_output.split('\n')
+    
+    available_space = None
+    
+    for line in disk_info_lines:
+        if 'Volume Free Space' in line:
+            available_space = line.split(':')[-1].strip()
+            break
+
 # Get system information
 def get_system_info():
     system_info = {}
@@ -37,41 +70,9 @@ def get_system_info():
     memory_info = run_command('sysctl -n hw.memsize')
     system_info['Memory'] = memory_info
     
-    # Get disk information
-    disk_list_output = run_command('diskutil list')
-    disk_list_lines = disk_list_output.split('\n')
-    
-    # Find the disk with the highest usage
-    highest_usage_disk = None
-    highest_usage_value = -1
-    
-    for line in disk_list_lines:
-        if 'Apple_APFS' in line:
-            line_parts = line.split()
-            if len(line_parts) > 3:
-                usage_percentage = line_parts[-2].replace('%', '')
-                try:
-                    usage_value = int(usage_percentage)
-                    if usage_value > highest_usage_value:
-                        highest_usage_value = usage_value
-                        highest_usage_disk = line_parts[1]
-                except ValueError:
-                    continue
-    
-    # Get space available for the highest usage disk
-    if highest_usage_disk:
-        disk_info_output = run_command(f'diskutil info {highest_usage_disk}')
-        disk_info_lines = disk_info_output.split('\n')
-        
-        available_space = None
-        
-        for line in disk_info_lines:
-            if 'Volume Free Space' in line:
-                available_space = line.split(':')[-1].strip()
-                break
-        
-        if available_space:
-            system_info['Disk Information'] = f"Disk {highest_usage_disk}, Space Available: {available_space}"
+    # Include disk information if available
+    if highest_usage_disk and available_space:
+        system_info['Disk Information'] = f"Disk {highest_usage_disk}, Space Available: {available_space}"
     
     # Get network interfaces
     network_interfaces = run_command('ifconfig -a')
@@ -83,9 +84,9 @@ def get_system_info():
 
     return system_info
 
-# Get and print system information
+# Get system information
 system_info = get_system_info()
-for key, value in system_info.items():
-    print(f'{key}:')
-    print(value)
-    print('-' * 50)
+
+# Print only the disk information
+if 'Disk Information' in system_info:
+    print(system_info['Disk Information'])
