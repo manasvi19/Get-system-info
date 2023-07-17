@@ -44,24 +44,6 @@ def get_system_info():
     disk_info = run_command('diskutil list')
     system_info['Disk Information'] = disk_info
 
-    '''disk_info = run_command('diskutil list')
-        disk_list_output = disk_info.split('\n')
-    
-        # Find the lines containing disk information
-        disk_lines = [line for line in disk_list_output if 'Apple_APFS' in line or 'FAT32' in line]
-    
-        # Extract disk details and space information
-        disk_details = []
-        for line in disk_lines:
-            line_parts = line.split()
-            if len(line_parts) >= 9:
-                disk_name = line_parts[5]
-                space_used = line_parts[7]
-                space_left = line_parts[8]
-                disk_details.append(f"Disk {disk_name}: Space Used: {space_used}, Space Left: {space_left}")
-    
-        system_info['Disk Information'] = '\n'.join(disk_details)'''
-
 
     # Get network interfaces
     network_interfaces = run_command('ifconfig -a')
@@ -72,29 +54,6 @@ def get_system_info():
     network_cards = network_cards_output.split('\n')
     formatted_network_cards = '\n'.join(network_cards)
     system_info['Network Cards'] = formatted_network_cards
-
-    
-    #network_cards_output = run_command('networksetup -listallhardwareports')
-    #network_cards = network_cards_output.split('\n')
-    #system_info['Network Cards'] = network_cards
-    
-    
-    
-     # Get memory information
-    # Get memory information
-    memory_info_output = run_command('sysctl -n hw.memsize')
-    match = re.search(r'(\d+)\.$', memory_info_output)
-    if match:
-        total_memory = int(match.group(1))
-        total_memory_gb = total_memory / (1024**3)
-        system_info['Total Memory'] = f"{total_memory_gb:.2f} GB"
-    
-    available_memory_output = run_command('vm_stat | grep "Pages free" | awk \'{print $3}\'')
-    available_memory_pages = int(available_memory_output)
-    available_memory_bytes = available_memory_pages * 4096
-    available_memory_gb = available_memory_bytes / (1024**3)
-    system_info['Available Memory'] = f"{available_memory_gb:.2f} GB"
-    
 
     
     return system_info
