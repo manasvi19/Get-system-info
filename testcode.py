@@ -50,8 +50,16 @@ def get_system_info():
     system_info['IP Addresses'] = ip_addresses
     network_cards_output = run_command('networksetup -listallhardwareports')
     network_cards = network_cards_output.split('\n')
-    formatted_network_cards = '\n'.join(network_cards)
-    system_info['Network Cards'] = formatted_network_cards
+    formatted_network_cards = []
+    is_vlan_section = False
+    for line in network_cards:
+        if line.strip() == "VLAN Configurations":
+            is_vlan_section = True
+        elif not is_vlan_section
+        formatted_network_cards.append(line)
+        
+        formatted_network_cards = '\n'.join(formatted_network_cards)
+        system_info['Network Cards'] = formatted_network_cards
 
     
     #network_cards_output = run_command('networksetup -listallhardwareports')
