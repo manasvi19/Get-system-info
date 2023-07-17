@@ -44,11 +44,9 @@ def get_network_cards():
         if line.startswith('Hardware Port:'):
             network_card = line.split(':')[1].strip()
             network_cards.append(network_card)
-    
-    ip_addresses_output = run_command('ifconfig | grep "inet " | awk \'{print $2}\'')
-    ip_addresses = ip_addresses_output.split('\n')
-    
-    return network_cards, ip_addresses
+
+    total_network_cards = len(network_cards)
+    return network_cards, total_network_cards, ip_addresses
 
 '''# Get system information
 def get_system_info():
