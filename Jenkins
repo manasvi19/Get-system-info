@@ -8,7 +8,7 @@ pipeline {
     }
     stage('getinfo') {
       steps {
-        sh 'python3 getinfo.py'
+        sh 'python3 code.py'
       }
     }
   }
