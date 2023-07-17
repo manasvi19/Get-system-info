@@ -5,10 +5,9 @@ pipeline {
         stage('Get System Information') {
             steps {
                 script {
-                    
+                    sh python2 testcode.py
                     }
                 }
             }
-        }
-    }
+}
 }
