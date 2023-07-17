@@ -80,10 +80,13 @@ def get_system_info():
     
     
      # Get memory information
-    total_memory_output = run_command('sysctl -n hw.memsize')
-    total_memory = int(total_memory_output)
-    total_memory_gb = total_memory / (1024**3)
-    system_info['Total Memory'] = f"{total_memory_gb:.2f} GB"
+    # Get memory information
+    memory_info_output = run_command('sysctl -n hw.memsize')
+    match = re.search(r'(\d+)\.$', memory_info_output)
+    if match:
+        total_memory = int(match.group(1))
+        total_memory_gb = total_memory / (1024**3)
+        system_info['Total Memory'] = f"{total_memory_gb:.2f} GB"
     
     available_memory_output = run_command('vm_stat | grep "Pages free" | awk \'{print $3}\'')
     available_memory_pages = int(available_memory_output)
