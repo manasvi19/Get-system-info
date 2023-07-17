@@ -3,6 +3,7 @@
 
 import platform
 import subprocess
+import re
 
 
 # Function to run a shell command and return the output
