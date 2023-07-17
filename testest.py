@@ -3,7 +3,6 @@
 
 import platform
 import subprocess
-import re
 
 
 # Function to run a shell command and return the output
@@ -11,6 +10,25 @@ def run_command(command):
     process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     output, _ = process.communicate()
     return output.decode('utf-8').strip()
+
+# Get disk information
+def get_disk_info():
+    disk_info = []
+    
+    # Get disk list
+    disk_list_output = run_command('diskutil list')
+    disk_list_lines = disk_list_output.split('\n')
+    
+    # Find the disks with their sizes
+    for line in disk_list_lines:
+        if 'disk' in line:
+            line_parts = line.split()
+            if len(line_parts) > 3:
+                disk_name = line_parts[0]
+                disk_size = line_parts[2]
+                disk_info.append(f"Disk {disk_name}: Size {disk_size}")
+    
+    return disk_info
 
 # Get system information
 def get_system_info():
@@ -47,29 +65,9 @@ def get_system_info():
     system_info['Available Memory'] = f'{available_memory_gb} GB'
     
     # Get disk information
-    def get_disk_info():
-        disk_info = []
+    disk_info = get_disk_info()
+    system_info['Disk Information'] = '\n'.join(disk_info)
     
-        # Get disk list
-        disk_list_output = run_command('diskutil list')
-        disk_list_lines = disk_list_output.split('\n')
-        
-        # Find the disks with their sizes
-        for line in disk_list_lines:
-            if 'disk' in line:
-                line_parts = line.split()
-                if len(line_parts) > 3:
-                    disk_name = line_parts[0]
-                    disk_size = line_parts[2]
-                    disk_info.append(f"Disk {disk_name}: Size {disk_size}")
-        
-        return disk_info
-    
-        # Get and print disk information
-        disk_info = get_disk_info()
-        for disk in disk_info:
-            print(disk)
-
     # Get network interfaces
     network_interfaces = run_command('ifconfig -a')
     ip_addresses_output = run_command('ifconfig | grep "inet " | awk \'{print $2}\'')
@@ -88,3 +86,4 @@ for key, value in system_info.items():
     print(f'{key}:')
     print(value)
     print('-' * 50)
+
