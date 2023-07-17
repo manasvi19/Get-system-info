@@ -1,15 +1,8 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
-
-
 import platform
 import subprocess
-
-
-# In[2]:
-
 
 
 # Function to run a shell command and return the output
@@ -66,8 +59,6 @@ for key, value in system_info.items():
     print(value)
     print('-' * 50)
 
-
-# In[ ]:
 
 
 
