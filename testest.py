@@ -36,18 +36,17 @@ def get_system_info():
     system_info['Processor'] = processor_name
     
     # Get memory information
-    memory_info_output = run_command('sysctl -n hw.memsize')
-    match = re.search(r'(\d+)\.$', memory_info_output)
-    if match:
-        total_memory = int(match.group(1))
-        total_memory_gb = total_memory / (1024**3)
-        system_info['Total Memory'] = f"{total_memory_gb:.2f} GB"
+    total_memory_output = run_command('sysctl -n hw.memsize')
+    total_memory_bytes = int(total_memory_output)
+    total_memory_gb = round(total_memory_bytes / (1024 ** 3), 2)
+    system_info['Total Memory'] = f'{total_memory_gb} GB'
     
-    available_memory_output = run_command('vm_stat | grep "Pages free" | awk \'{print $3}\'')
-    available_memory_pages = int(available_memory_output)
-    available_memory_bytes = available_memory_pages * 4096
-    available_memory_gb = available_memory_bytes / (1024**3)
-    system_info['Available Memory'] = f"{available_memory_gb:.2f} GB"
+    available_memory_output = run_command('sysctl -n vm.stats.vm.v_page_count')
+    available_memory_pages = re.findall(r'\d+', available_memory_output)
+    if available_memory_pages:
+        available_memory_bytes = int(available_memory_pages[0]) * 4096
+        available_memory_gb = round(available_memory_bytes / (1024 ** 3), 2)
+        system_info['Available Memory'] = f'{available_memory_gb} GB'
     
     # Get disk information
     disk_info = run_command('diskutil list')
@@ -62,7 +61,7 @@ def get_system_info():
     network_cards = network_cards_output.split('\n')
     formatted_network_cards = '\n'.join(network_cards)
     system_info['Network Cards'] = formatted_network_cards
-    
+
     return system_info
 
 # Get and print system information
