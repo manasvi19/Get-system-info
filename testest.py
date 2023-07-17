@@ -83,7 +83,7 @@ def get_system_info():
     memory_info = run_command('sysctl -n hw.memsize')
     system_info['Memory'] = memory_info
 
-    # Get disk usage information
+   # Get disk usage information
     disk_usage = get_disk_usage()
     system_info['Disk Usage'] = disk_usage
     
