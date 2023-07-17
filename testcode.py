@@ -42,6 +42,22 @@ def get_system_info():
     # Get disk information
     disk_info = run_command('diskutil list')
     system_info['Disk Information'] = disk_info
+
+    disk_info = run_command('diskutil list')
+    disk_list_output = disk_info.split('\n')
+    # Find the lines containing disk information
+    disk_lines = [line for line in disk_list_output if 'Apple_APFS' in line or 'FAT32' in line]
+# Extract disk details and space information
+    disk_details = []
+    for line in disk_lines:
+        line_parts = line.split()
+    if len(line_parts) >= 6:
+        disk_name = line_parts[0]
+        space_used = line_parts[2]
+        space_left = line_parts[3]
+        disk_details.append(f"Disk {disk_name}: Space Used: {space_used}, Space Left: {space_left}")
+
+    system_info['Disk Information'] = '\n'.join(disk_details)
     
     # Get network interfaces
     network_interfaces = run_command('ifconfig -a')
