@@ -44,36 +44,36 @@ def get_system_info():
     # system_info['Disk Information'] = disk_info
 
     # Get disk information
-disk_list_output = run_command('diskutil list')
-disk_list_lines = disk_list_output.split('\n')
+    disk_list_output = run_command('diskutil list')
+    disk_list_lines = disk_list_output.split('\n')
 
-# Find the disk with the highest usage
-highest_usage_disk = None
-highest_usage_value = -1
-
-for line in disk_list_lines:
-    if 'Apple_APFS' in line:
-        line_parts = line.split()
-        if len(line_parts) > 3:
-            usage_percentage = line_parts[-2].replace('%', '')
-            try:
-                usage_value = int(usage_percentage)
-                if usage_value > highest_usage_value:
-                    highest_usage_value = usage_value
-                    highest_usage_disk = line_parts[0]
-            except ValueError:
-                continue
-
-# Get space usage information for the highest usage disk
-if highest_usage_disk:
-    disk_usage_output = run_command(f'df -H {highest_usage_disk}')
-    disk_usage_lines = disk_usage_output.split('\n')
-    if len(disk_usage_lines) > 1:
-        space_used_line = disk_usage_lines[1]
-        space_used_parts = space_used_line.split()
-        if len(space_used_parts) > 4:
-            space_used = space_used_parts[2]
-            print(f"Disk Information: Disk {highest_usage_disk}, Space Used: {space_used}")
+    # Find the disk with the highest usage
+    highest_usage_disk = None
+    highest_usage_value = -1
+    
+    for line in disk_list_lines:
+        if 'Apple_APFS' in line:
+            line_parts = line.split()
+            if len(line_parts) > 3:
+                usage_percentage = line_parts[-2].replace('%', '')
+                try:
+                    usage_value = int(usage_percentage)
+                    if usage_value > highest_usage_value:
+                        highest_usage_value = usage_value
+                        highest_usage_disk = line_parts[0]
+                except ValueError:
+                    continue
+    
+    # Get space usage information for the highest usage disk
+    if highest_usage_disk:
+        disk_usage_output = run_command(f'df -H {highest_usage_disk}')
+        disk_usage_lines = disk_usage_output.split('\n')
+        if len(disk_usage_lines) > 1:
+            space_used_line = disk_usage_lines[1]
+            space_used_parts = space_used_line.split()
+            if len(space_used_parts) > 4:
+                space_used = space_used_parts[2]
+                print(f"Disk Information: Disk {highest_usage_disk}, Space Used: {space_used}")
     
     # Get network interfaces
     network_interfaces = run_command('ifconfig -a')
