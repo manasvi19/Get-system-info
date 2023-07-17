@@ -8,6 +8,8 @@ pipeline {
     }
     stage('getinfo') {
       steps {
+// Activate the Anaconda environment
+sh 'source /opt/anaconda3/bin/activate && conda activate my_env'
         sh 'python3 code.py'
       }
     }
