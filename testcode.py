@@ -50,5 +50,5 @@ def run_command(command):
                   table.add_row(["Disk Information", disk_info])
                   table.add_row(["Network Interfaces", network_interfaces])
 
-                  print(table)
+                  sys.stdout.write(table.get_string())
    
