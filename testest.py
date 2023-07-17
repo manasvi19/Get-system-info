@@ -12,6 +12,30 @@ def run_command(command):
     output, _ = process.communicate()
     return output.decode('utf-8').strip()
 
+# Function to get disk usage
+def get_disk_usage():
+    df_output = run_command('df -h')
+    df_lines = df_output.split('\n')[1:]
+    
+    disk_usage = []
+    for line in df_lines:
+        parts = line.split()
+        if len(parts) >= 5:
+            filesystem = parts[0]
+            size = parts[1]
+            used = parts[2]
+            available = parts[3]
+            percentage_used = parts[4]
+            disk_usage.append({
+                'Filesystem': filesystem,
+                'Size': size,
+                'Used': used,
+                'Available': available,
+                'Percentage Used': percentage_used
+            })
+    
+    return disk_usage
+
 # Get system information
 def get_system_info():
     system_info = {}
@@ -24,7 +48,6 @@ def get_system_info():
     os_name = platform.system()
     os_version = platform.mac_ver()[0]
     os_build = run_command('sw_vers -buildVersion')
-    #os_manufacturer = "Apple"
     os_manufacturer = platform.system()
     print("OS Manufacturer:", os_manufacturer)
     system_info['OS Name'] = os_name
@@ -43,7 +66,10 @@ def get_system_info():
     # Get disk information
     disk_info = run_command('diskutil list')
     system_info['Disk Information'] = disk_info
-
+    
+    # Get disk usage
+    disk_usage = get_disk_usage()
+    system_info['Disk Usage'] = disk_usage
 
     # Get network interfaces
     network_interfaces = run_command('ifconfig -a')
@@ -55,7 +81,6 @@ def get_system_info():
     formatted_network_cards = '\n'.join(network_cards)
     system_info['Network Cards'] = formatted_network_cards
 
-    
     return system_info
 
 # Get and print system information
