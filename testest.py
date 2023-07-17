@@ -93,7 +93,7 @@ def get_system_info():
     system_info['IP Addresses'] = ip_addresses
     
     # Get network interfaces
-   ''' network_interfaces = run_command('ifconfig -a')
+    ''' network_interfaces = run_command('ifconfig -a')
     ip_addresses_output = run_command('ifconfig | grep "inet " | awk \'{print $2}\'')
     ip_addresses = ip_addresses_output.split('\n')
     system_info['IP Addresses'] = ip_addresses
