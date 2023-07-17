@@ -53,11 +53,11 @@ def get_system_info():
     disk_details = []
     for line in disk_lines:
         line_parts = line.split()
-    if len(line_parts) >= 9:
-        disk_name = line_parts[5]
-        space_used = line_parts[7]
-        space_left = line_parts[8]
-        disk_details.append(f"Disk {disk_name}: Space Used: {space_used}, Space Left: {space_left}")
+        if len(line_parts) >= 9:
+            disk_name = line_parts[5]
+            space_used = line_parts[7]
+            space_left = line_parts[8]
+            disk_details.append(f"Disk {disk_name}: Space Used: {space_used}, Space Left: {space_left}")
 
     system_info['Disk Information'] = '\n'.join(disk_details)
 
