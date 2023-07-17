@@ -8,9 +8,9 @@ pipeline {
     }
     stage('getinfo') {
       steps {
-// Activate the Anaconda environment
-sh 'source /opt/anaconda3/bin/activate && conda activate my_env'
-        sh 'python3 code.py'
+// Run the Python script using the Anaconda Python interpreter
+                sh '/Users/manasvidhankani/opt/anaconda3/bin/python code.py'
+      // sh 'python3 code.py'
       }
     }
   }
