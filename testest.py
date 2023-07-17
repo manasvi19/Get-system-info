@@ -5,7 +5,6 @@ import platform
 import subprocess
 import re
 
-
 # Function to run a shell command and return the output
 def run_command(command):
     process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
@@ -26,17 +25,19 @@ def get_disk_usage():
             used = parts[2]
             available = parts[3]
             percentage_used = parts[4]
+            
             # Handle the case when the percentage used is not in a recognized format
             try:
                 percentage = float(percentage_used.strip('%'))
             except ValueError:
                 percentage = 0.0
+            
             disk_usage.append({
                 'Filesystem': filesystem,
                 'Size': size,
                 'Used': used,
                 'Available': available,
-                'Percentage Used': percentage_used
+                'Percentage Used': percentage
             })
     
     return disk_usage
@@ -71,11 +72,10 @@ def get_system_info():
     disk_info = run_command('diskutil list')
     system_info['Disk Information'] = disk_info
     
-    # Get disk usage
+    # Get disk usage information
     disk_usage = get_disk_usage()
-    most_used_disk = max(disk_usage, key=lambda x: float(x['Percentage Used'].strip('%')))
-    system_info['Most Used Disk'] = most_used_disk
-
+    system_info['Disk Usage'] = disk_usage
+    
     # Get network interfaces
     network_interfaces = run_command('ifconfig -a')
     ip_addresses_output = run_command('ifconfig | grep "inet " | awk \'{print $2}\'')
@@ -91,5 +91,11 @@ def get_system_info():
 # Get and print system information
 system_info = get_system_info()
 for key, value in system_info.items():
-    print(f'{key}:\n{value}')
-    print('-' * 50)
+    print(f'{key}:')
+    if key == 'Disk Usage':
+        for disk in value:
+            print('\n'.join(f'{k}: {v}' for k, v in disk.items()))
+            print('-' * 50)
+    else:
+        print(value)
+        print('-' * 50)
