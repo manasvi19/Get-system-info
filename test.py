@@ -5,7 +5,6 @@ import platform
 import subprocess
 import re
 
-
 # Function to run a shell command and return the output
 def run_command(command):
     process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
@@ -25,13 +24,20 @@ def get_disk_usage():
             size = parts[1]
             used = parts[2]
             available = parts[3]
+            percentage_used = parts[4]
+            
+            # Handle the case when the percentage used is not in a recognized format
+            try:
+                percentage = float(percentage_used.strip('%'))
+            except ValueError:
+                percentage = 0.0
             
             disk_usage.append({
                 'Filesystem': filesystem,
+                'Size': size,
                 'Used': used,
                 'Available': available
             })
-    
     return disk_usage
 
 
@@ -88,6 +94,7 @@ def get_system_info():
     return system_info
 
 # Get and print system information
+system_info = get_system_info()
 for key, value in system_info.items():
     print(f'{key}:')
     if key == 'Disk Usage':
@@ -96,11 +103,8 @@ for key, value in system_info.items():
             print(f'Used: {disk["Used"]}')
             print(f'Available: {disk["Available"]}')
             print('-' * 50)
-    elif key == 'Network Cards':
-        network_cards = dict(value)
-        for network_card, ip_address in network_cards.items():
-            print(f'{network_card}: {ip_address}')
-        print('-' * 50)
     else:
         print(value)
         print('-' * 50)
+
+
