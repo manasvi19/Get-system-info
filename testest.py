@@ -26,6 +26,11 @@ def get_disk_usage():
             used = parts[2]
             available = parts[3]
             percentage_used = parts[4]
+            # Handle the case when the percentage used is not in a recognized format
+            try:
+                percentage = float(percentage_used.strip('%'))
+            except ValueError:
+                percentage = 0.0
             disk_usage.append({
                 'Filesystem': filesystem,
                 'Size': size,
