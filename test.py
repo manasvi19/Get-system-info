@@ -5,6 +5,7 @@ import platform
 import subprocess
 import re
 
+
 # Function to run a shell command and return the output
 def run_command(command):
     process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
@@ -36,10 +37,11 @@ def get_disk_usage():
                 'Filesystem': filesystem,
                 'Size': size,
                 'Used': used,
-                'Available': available
+                'Available': available,
+                'Percentage Used': percentage
             })
+    
     return disk_usage
-
 
 # Function to get network cards and their IP addresses
 def get_network_cards():
@@ -90,7 +92,7 @@ def get_system_info():
     network_cards, ip_addresses = get_network_cards()
     system_info['Network Cards'] = network_cards
     system_info['IP Addresses'] = ip_addresses
-
+    
     return system_info
 
 # Get and print system information
@@ -99,10 +101,13 @@ for key, value in system_info.items():
     print(f'{key}:')
     if key == 'Disk Usage':
         for disk in value:
-            print(f'Filesystem: {disk["Filesystem"]}')
-            print(f'Used: {disk["Used"]}')
-            print(f'Available: {disk["Available"]}')
+            print('\n'.join(f'{k}: {v}' for k, v in disk.items()))
             print('-' * 50)
+    elif key == 'Network Cards':
+        print(f'Total Network Cards: {len(value)}')
+        for card in value:
+            print(card)
+        print('-' * 50)
     else:
         print(value)
         print('-' * 50)
