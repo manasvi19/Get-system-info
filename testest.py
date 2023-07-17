@@ -49,7 +49,6 @@ def get_system_info():
     os_version = platform.mac_ver()[0]
     os_build = run_command('sw_vers -buildVersion')
     os_manufacturer = platform.system()
-    print("OS Manufacturer:", os_manufacturer)
     system_info['OS Name'] = os_name
     system_info['OS Version'] = os_version
     system_info['OS Build'] = os_build
@@ -69,7 +68,8 @@ def get_system_info():
     
     # Get disk usage
     disk_usage = get_disk_usage()
-    system_info['Disk Usage'] = disk_usage
+    most_used_disk = max(disk_usage, key=lambda x: float(x['Percentage Used'].strip('%')))
+    system_info['Most Used Disk'] = most_used_disk
 
     # Get network interfaces
     network_interfaces = run_command('ifconfig -a')
@@ -86,6 +86,5 @@ def get_system_info():
 # Get and print system information
 system_info = get_system_info()
 for key, value in system_info.items():
-    print(f'{key}:')
-    print(value)
+    print(f'{key}:\n{value}')
     print('-' * 50)
