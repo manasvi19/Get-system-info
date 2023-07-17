@@ -87,6 +87,8 @@ def get_system_info():
 # Get system information
 system_info = get_system_info()
 
-# Print only the disk information
-if 'Disk Information' in system_info:
-    print(system_info['Disk Information'])
+# Print the system information
+for key, value in system_info.items():
+    print(f'{key}:')
+    print(value)
+    print('-' * 50)
