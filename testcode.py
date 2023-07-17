@@ -1,3 +1,4 @@
+import sys
 import platform
 import subprocess
 from prettytable import PrettyTable
