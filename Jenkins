@@ -9,8 +9,8 @@ pipeline {
     stage('getinfo') {
       steps {
 // Run the Python script using the Anaconda Python interpreter
-                sh '/Users/manasvidhankani/opt/anaconda3/bin/python testest.py'
-      // sh 'python3 testest.py'
+                sh '/Users/manasvidhankani/opt/anaconda3/bin/python test.py'
+      // sh 'python3 test.py'
       }
     }
   }
