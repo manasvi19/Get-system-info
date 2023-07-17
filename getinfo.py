@@ -23,7 +23,9 @@ def get_system_info():
     os_name = platform.system()
     os_version = platform.mac_ver()[0]
     os_build = run_command('sw_vers -buildVersion')
-    os_manufacturer = "Apple"
+    #os_manufacturer = "Apple"
+    os_manufacturer = platform.system()
+    print("OS Manufacturer:", os_manufacturer)
     system_info['OS Name'] = os_name
     system_info['OS Version'] = os_version
     system_info['OS Build'] = os_build
