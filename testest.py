@@ -103,14 +103,22 @@ def get_system_info():
 
     return system_info
 
+# Get network cards and their IP addresses
+    network_cards, ip_addresses = get_network_cards()
+    system_info['Network Cards'] = network_cards
+    system_info['IP Addresses'] = ip_addresses
+    
+    return system_info
+
 # Get and print system information
 system_info = get_system_info()
 for key, value in system_info.items():
     print(f'{key}:')
-    if key == 'Disk Usage':
-        for disk in value:
-            print('\n'.join(f'{k}: {v}' for k, v in disk.items()))
-            print('-' * 50)
+    if key == 'Network Cards':
+        print(f'Total Network Cards: {len(value)}')
+    elif key == 'IP Addresses':
+        for ip_address in value:
+            print(ip_address)
     else:
         print(value)
-        print('-' * 50)
+    print('-' * 50)
