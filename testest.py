@@ -11,36 +11,20 @@ def run_command(command):
     output, _ = process.communicate()
     return output.decode('utf-8').strip()
 
-# Function to get disk usage
-def get_disk_usage():
-    df_output = run_command('df -h')
-    df_lines = df_output.split('\n')[1:]
+# Function to get network cards and their IP addresses
+def get_network_cards():
+    network_cards_output = run_command('networksetup -listallhardwareports')
+    network_cards_lines = network_cards_output.split('\n')
+    network_cards = []
+    for line in network_cards_lines:
+        if line.startswith('Hardware Port:'):
+            network_card = line.split(':')[1].strip()
+            network_cards.append(network_card)
     
-    disk_usage = []
-    for line in df_lines:
-        parts = line.split()
-        if len(parts) >= 5:
-            filesystem = parts[0]
-            size = parts[1]
-            used = parts[2]
-            available = parts[3]
-            percentage_used = parts[4]
-            
-            # Handle the case when the percentage used is not in a recognized format
-            try:
-                percentage = float(percentage_used.strip('%'))
-            except ValueError:
-                percentage = 0.0
-            
-            disk_usage.append({
-                'Filesystem': filesystem,
-                'Size': size,
-                'Used': used,
-                'Available': available,
-                'Percentage Used': percentage
-            })
+    ip_addresses_output = run_command('ifconfig | grep "inet " | awk \'{print $2}\'')
+    ip_addresses = ip_addresses_output.split('\n')
     
-    return disk_usage
+    return network_cards, ip_addresses
 
 # Get system information
 def get_system_info():
@@ -72,30 +56,23 @@ def get_system_info():
     #disk_info = run_command('diskutil list')
     #system_info['Disk Information'] = disk_info
     
-    # Get disk usage information
-    disk_usage = get_disk_usage()
-    system_info['Disk Usage'] = disk_usage
-    
-    # Get network interfaces
-    network_interfaces = run_command('ifconfig -a')
-    ip_addresses_output = run_command('ifconfig | grep "inet " | awk \'{print $2}\'')
-    ip_addresses = ip_addresses_output.split('\n')
+    # Get network cards and their IP addresses
+    network_cards, ip_addresses = get_network_cards()
+    system_info['Network Cards'] = network_cards
     system_info['IP Addresses'] = ip_addresses
-    network_cards_output = run_command('networksetup -listallhardwareports')
-    network_cards = network_cards_output.split('\n')
-    formatted_network_cards = '\n'.join(network_cards)
-    system_info['Network Cards'] = formatted_network_cards
-
+    
     return system_info
 
 # Get and print system information
 system_info = get_system_info()
 for key, value in system_info.items():
     print(f'{key}:')
-    if key == 'Disk Usage':
-        for disk in value:
-            print('\n'.join(f'{k}: {v}' for k, v in disk.items()))
-            print('-' * 50)
+    if key == 'Network Cards':
+        print(f'Total Network Cards: {len(value)}')
+    elif key == 'IP Addresses':
+        for ip_address in value:
+            print(ip_address)
     else:
         print(value)
-        print('-' * 50)
+    print('-' * 50)
+
