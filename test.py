@@ -50,7 +50,7 @@ def get_network_cards():
     
     return network_cards, ip_addresses
 
-# Get system information
+'''# Get system information
 def get_system_info():
     system_info = {}
     
@@ -85,7 +85,59 @@ def get_system_info():
     system_info['Network Cards'] = network_cards
     system_info['IP Addresses'] = ip_addresses
 
-    return system_info
+    return system_info'''
+# Get system information
+system_info = {}
+
+# Get host name
+host_name = run_command('scutil --get ComputerName')
+system_info['Host Name'] = host_name
+
+# Get operating system information
+os_name = platform.system()
+os_version = platform.mac_ver()[0]
+os_build = run_command('sw_vers -buildVersion')
+os_manufacturer = platform.system()
+system_info['OS Name'] = os_name
+system_info['OS Version'] = os_version
+system_info['OS Build'] = os_build
+system_info['OS Manufacturer'] = os_manufacturer
+
+# Get processor information
+processor_name = run_command('sysctl -n machdep.cpu.brand_string')
+system_info['Processor'] = processor_name
+
+# Get memory information
+memory_info = run_command('sysctl -n hw.memsize')
+system_info['Memory'] = memory_info
+
+# Get disk usage information
+disk_usage = get_disk_usage()
+system_info['Disk Usage'] = disk_usage
+
+# Get network cards and their IP addresses
+network_cards, ip_addresses = get_network_cards()
+system_info['Network Cards'] = network_cards
+system_info['IP Addresses'] = ip_addresses
+
+# Get and print system information
+for key, value in system_info.items():
+    print(f'{key}:')
+    if key == 'Disk Usage':
+        for disk in value:
+            print(f'Filesystem: {disk["Filesystem"]}')
+            print(f'Used: {disk["Used"]}')
+            print(f'Available: {disk["Available"]}')
+            print('-' * 50)
+    elif key == 'Network Cards':
+        network_cards = dict(value)
+        for network_card, ip_address in network_cards.items():
+            print(f'{network_card}: {ip_address}')
+        print('-' * 50)
+    else:
+        print(value)
+        print('-' * 50)
+
 
 # Get and print system information
 for key, value in system_info.items():
