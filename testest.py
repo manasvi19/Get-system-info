@@ -69,8 +69,8 @@ def get_system_info():
     system_info['Memory'] = memory_info
     
     # Get disk information
-    disk_info = run_command('diskutil list')
-    system_info['Disk Information'] = disk_info
+    #disk_info = run_command('diskutil list')
+    #system_info['Disk Information'] = disk_info
     
     # Get disk usage information
     disk_usage = get_disk_usage()
