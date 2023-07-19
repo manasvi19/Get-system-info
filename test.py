@@ -13,7 +13,7 @@ def run_command(command):
 
 # Function to get disk usage
 def get_disk_usage():
-    df_output = run_command('df -h')/
+    df_output = run_command('df -h')
     df_lines = df_output.split('\n')[1:]
     
     disk_usage = []
@@ -38,7 +38,7 @@ def get_disk_usage():
                 'Used': used,
                 'Available': available
             })
-    #return disk_usage
+    return disk_usage
 
 
 # Function to get network cards and their IP addresses
