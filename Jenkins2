@@ -2,10 +2,10 @@
 void create_newjira_issue() {
   node {
     stage('JIRA') {
-      def NewJiraIssue = [fields: [project: [key: 'JIT'],
+      def NewJiraIssue = [fields: [project: [key: 'JT'],
         summary: 'Build Failed : Summary.',
         description: 'Description of JIRA ticket ',
-        issuetype: [id: '3']]]
+        issuetype: [name: 'Bug']]]
 
       response = jiraNewIssue issue: NewJiraIssue, site: 'THAT CAN BE SET IN JENKINS CONFIGURATION OR CAN DIRECTLY WRITE HERE'
 
