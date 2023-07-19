@@ -94,7 +94,7 @@ def get_system_info():
     system_info['Network Cards'] = network_cards
     system_info['IP Addresses'] = ip_addresses
 
-    return system_info
+   # return system_info
 
 # Get and print system information
 system_info = get_system_info()
