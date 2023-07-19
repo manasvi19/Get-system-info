@@ -21,7 +21,7 @@ pipeline {
       script {
         def jira = jiraNewIssue(
           issueType: 'Bug',
-          projectKey: 'JT-1',
+          projectKey: 'JT',
           summary: "Build Failure: python-testtt",
           description: "A build failure occurred in python-testtt.\nError message: Stage '${env.STAGE_NAME}' failed with error: ${env.ERROR_MESSAGE}",
           assignee: 'manasvid',
