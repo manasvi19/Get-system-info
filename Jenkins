@@ -22,12 +22,12 @@ pipeline {
         def jira = jiraNewIssue(
           issueType: 'Bug',
           projectKey: 'PROJ',
-          summary: "Build Failure: ${env.JOB_NAME}",
-          description: "A build failure occurred in ${env.JOB_NAME}.\nError message: Stage '${env.STAGE_NAME}' failed with error: ${env.ERROR_MESSAGE}",
-          assignee: 'jirauser',
+          summary: "Build Failure: python-testtt",
+          description: "A build failure occurred in python-testtt.\nError message: Stage '${env.STAGE_NAME}' failed with error: ${env.ERROR_MESSAGE}",
+          assignee: 'manasvid',
           components: 'Component1,Component2'
         )
-        echo "Created Jira issue: ${jira.key}"
+        echo "Created Jira issue: JT-1"
       }
     }
   }
