@@ -1,4 +1,4 @@
-// Function to create a new Jira issue
+#Function to create a new Jira issue
 void create_newjira_issue() {
   node {
     stage('JIRA') {
