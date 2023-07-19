@@ -13,7 +13,7 @@ def run_command(command):
 
 # Function to get disk usage
 def get_disk_usage():
-    df_output = run_command('df -h')
+    df_output = run_command('df -kh')
     df_lines = df_output.split('\n')[1:]
     
     disk_usage = []
