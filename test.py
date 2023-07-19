@@ -38,7 +38,7 @@ def get_disk_usage():
                 'Used': used,
                 'Available': available
             })
-    return disk_usage
+    #return disk_usage
 
 
 # Function to get network cards and their IP addresses
