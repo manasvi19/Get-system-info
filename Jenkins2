@@ -1,3 +1,20 @@
+// Function to create a new Jira issue
+void create_newjira_issue() {
+  node {
+    stage('JIRA') {
+      def NewJiraIssue = [fields: [project: [key: 'JIT'],
+        summary: 'Build Failed : Summary.',
+        description: 'Description of JIRA ticket ',
+        issuetype: [id: '3']]]
+
+      response = jiraNewIssue issue: NewJiraIssue, site: 'THAT CAN BE SET IN JENKINS CONFIGURATION OR CAN DIRECTLY WRITE HERE'
+
+      echo response.successful.toString()
+      echo response.data.toString()
+    }
+  }
+}
+
 pipeline {
   agent any
 
@@ -18,17 +35,8 @@ pipeline {
 
   post {
     failure {
-      script {
-        def jira = jiraNewIssue(
-          issueType: 'Bug',
-          projectKey: 'JT',
-          summary: "Build Failure: python-testtt",
-          description: "A build failure occurred in python-testtt.\nError message: Stage '${env.STAGE_NAME}' failed with error: ${env.ERROR_MESSAGE}",
-          assignee: 'manasvid',
-          components: 'Component1,Component2'
-        )
-        echo "Created Jira issue: JT-1"
-      }
+      // Create Jira issue if build fails
+      create_newjira_issue()
     }
   }
 }
