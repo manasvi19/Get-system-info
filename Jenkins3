@@ -1,51 +1,43 @@
 // Function to create a new Jira issue
 void create_newjira_issue() {
-    node {
-        stage('JIRA') {
-            def jiraURL = 'https://manasvid.atlassian.net'
-            def jiraUsername = 'manasvid'
-            def jiraPasswordOrToken = 'ATATT3xFfGF0A4xLOweqmbnlw3X6mpVbsRF1GtenOIS64NLab4DVIT4lBHlR2F8t_0xfA1M63LR7TS1Fi3_M_IPoyAXNV-Vxdj1twD-2GmsSeIhhH3IqkmpL9yoDOAD8YqQShSpSF9OW4r8ttlUSWG717KRPGIXMWNE5SHbjBZ5aP2CRsSlt0EQ=ED677264'
+  node {
+    stage('JIRA') {
+      def jiraURL = 'https://manasvid.atlassian.net'
+      def NewJiraIssue = [fields: [project: [key: 'JT'],
+        summary: 'Build Failed : Summary.',
+        description: 'Description of JIRA ticket-from Jenkins',
+        issuetype: [name: 'Bug']]]
 
-            def NewJiraIssue = [
-                fields: [
-                    project: [key: 'JT'],
-                    summary: 'Build Failed: Summary.',
-                    description: 'Description of JIRA ticket from Jenkins',
-                    issuetype: [name: 'Bug']
-                ]
-            ]
+      response = jiraNewIssue issue: NewJiraIssue, site: jiraURL
 
-            // Create the Jira issue using JiraNewIssueStep
-            def response = jiraNewIssue issue: NewJiraIssue, site: jiraURL, credentialsId: 'f4f6fc3b-b281-45b3-8085-b77c53e0fd69'
-
-            echo response.successful.toString()
-            echo response.data.toString()
-        }
+      echo response.successful.toString()
+      echo response.data.toString()
     }
+  }
 }
 
 pipeline {
-    agent any
+  agent any
 
-    stages {
-        stage('version') {
-            steps {
-                sh 'python3 --version'
-            }
-        }
-
-        stage('getinfo') {
-            steps {
-                // Run the Python script using the Anaconda Python interpreter
-                sh '/Users/manasvidhankani/opt/anaconda3/bin/python test.py'
-            }
-        }
+  stages {
+    stage('version') {
+      steps {
+        sh 'python3 --version'
+      }
     }
 
-    post {
-        failure {
-            // Create Jira issue if build fails
-            create_newjira_issue()
-        }
+    stage('getinfo') {
+      steps {
+        // Run the Python script using the Anaconda Python interpreter
+        sh '/Users/manasvidhankani/opt/anaconda3/bin/python test.py'
+      }
     }
+  }
+
+  post {
+    failure {
+      // Create Jira issue if build fails
+      create_newjira_issue()
+    }
+  }
 }
