@@ -2,13 +2,13 @@
 void create_newjira_issue() {
   node {
     stage('JIRA') {
-      def jiraserver = 'TESTING'
+      def jiraURL = 'https://manasvid.atlassian.net'
       def NewJiraIssue = [fields: [project: [key: 'JT'],
         summary: 'Build Failed : Summary.',
         description: 'Description of JIRA ticket-from jenkins ',
         issuetype: [name: 'Bug']]]
 
-      response = jiraNewIssue issue: NewJiraIssue, site:jiraserver
+      response = jiraNewIssue issue: NewJiraIssue, site:jiraURL
 
       echo response.successful.toString()
       echo response.data.toString()
