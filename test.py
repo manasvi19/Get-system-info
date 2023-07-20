@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 #commented import platform to induce an error
+
 #import platform
 import subprocess
 import re
