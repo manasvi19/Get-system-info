@@ -21,7 +21,7 @@ void create_newjira_issue() {
             
             // If using Jira username and password
             withCredentials([usernamePassword(credentialsId: 'jira-credentials', passwordVariable: '?N4viN:9!^~/G8F', usernameVariable: 'manasvid')]) {
-                response = jiraNewIssue issue: NewJiraIssue, site: jiraURL, username: manasvid, password: ?N4viN:9!^~/G8F
+                response = jiraNewIssue issue: NewJiraIssue, site: jiraURL, username: 'manasvid', password: '?N4viN:9!^~/G8F'
             }
 
             
