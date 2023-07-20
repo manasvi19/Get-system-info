@@ -1,4 +1,4 @@
-import org.jenkinsci.plugins.workflow.steps.jira.NewIssueStep
+import org.jenkinsci.plugins.jira.workflow.NewIssueStep
 // Function to create a new Jira issue
 void create_newjira_issue() {
     node {
