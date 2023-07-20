@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-import platform
+#import platform
 import subprocess
-#import re
+import re
 
 # Function to run a shell command and return the output
 def run_command(command):
