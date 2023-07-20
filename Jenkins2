@@ -2,12 +2,13 @@
 void create_newjira_issue() {
   node {
     stage('JIRA') {
+      defjiraserver = 'TESTING'
       def NewJiraIssue = [fields: [project: [key: 'JT'],
         summary: 'Build Failed : Summary.',
-        description: 'Description of JIRA ticket ',
+        description: 'Description of JIRA ticket-from jenkins ',
         issuetype: [name: 'Bug']]]
 
-      response = jiraNewIssue issue: NewJiraIssue, site: 'THAT CAN BE SET IN JENKINS CONFIGURATION OR CAN DIRECTLY WRITE HERE'
+      response = jiraNewIssue issue: NewJiraIssue, site:jiraserver
 
       echo response.successful.toString()
       echo response.data.toString()
