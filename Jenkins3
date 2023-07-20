@@ -1,0 +1,59 @@
+// Function to create a new Jira issue
+void create_newjira_issue() {
+    node {
+        stage('JIRA') {
+            def jiraURL = 'https://manasvid.atlassian.net'
+
+            // Jira credentials
+            def jiraUsername = 'manasvid' // Replace with your Jira username
+            def jiraPasswordOrToken = '?N4viN:9!^~/G8F' 
+
+            def NewJiraIssue = [
+                fields: [
+                    project: [key: 'JT'],
+                    summary: 'Build Failed: Summary.',
+                    description: 'Description of JIRA ticket from Jenkins',
+                    issuetype: [name: 'Bug']
+                ]
+            ]
+
+            // Authenticate with Jira (choose the appropriate method below)
+            
+            // If using Jira username and password
+            withCredentials([usernamePassword(credentialsId: 'jira-credentials', passwordVariable: '?N4viN:9!^~/G8F', usernameVariable: 'manasvid')]) {
+                response = jiraNewIssue issue: NewJiraIssue, site: jiraURL, username: manasvid, password: ?N4viN:9!^~/G8F
+            }
+
+            
+
+            echo response.successful.toString()
+            echo response.data.toString()
+        }
+    }
+}
+
+pipeline {
+    agent any
+    
+    stages {
+        stage('version') {
+            steps {
+                sh 'python3 --version'
+            }
+        }
+
+        stage('getinfo') {
+            steps {
+                // Run the Python script using the Anaconda Python interpreter
+                sh '/Users/manasvidhankani/opt/anaconda3/bin/python test.py'
+            }
+        }
+    }
+
+    post {
+        failure {
+            // Create Jira issue if build fails
+            create_newjira_issue()
+        }
+    }
+}
