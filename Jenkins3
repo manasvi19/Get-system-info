@@ -1,5 +1,5 @@
 import org.thoughtslive.jenkins.plugins.jira.api.NewIssue
-import org.thoughtslive.jenkins.plugins.jira.steps.NewIssueStep
+import org.jenkinsci.plugins.jira.steps.NewIssueStep
 
 // Function to create a new Jira issue
 void create_newjira_issue() {
