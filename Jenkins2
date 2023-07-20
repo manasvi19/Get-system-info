@@ -2,7 +2,7 @@
 void create_newjira_issue() {
   node {
     stage('JIRA') {
-      def jiraURL = 'https://manasvid.atlassian.net/'
+      def jiraURL = 'https://manasvid.atlassian.net'
       def NewJiraIssue = [fields: [project: [key: 'JT'],
         summary: 'Build Failed : Summary.',
         description: 'Description of JIRA ticket-from jenkins ',
