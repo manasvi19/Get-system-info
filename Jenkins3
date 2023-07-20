@@ -5,7 +5,7 @@ void create_newjira_issue() {
             def jiraURL = 'https://manasvid.atlassian.net'
 
             
-            withCredentials([usernamePassword(credentialsId: 'f4f6fc3b-b281-45b3-8085-b77c53e0fd69', passwordVariable: 'ATATT3xFfGF0A4xLOweqmbnlw3X6mpVbsRF1GtenOIS64NLab4DVIT4lBHlR2F8t_0xfA1M63LR7TS1Fi3_M_IPoyAXNV-Vxdj1twD-2GmsSeIhhH3IqkmpL9yoDOAD8YqQShSpSF9OW4r8ttlUSWG717KRPGIXMWNE5SHbjBZ5aP2CRsSlt0EQ=ED677264', usernameVariable: 'manasvid)])
+            withCredentials([usernamePassword(credentialsId: 'f4f6fc3b-b281-45b3-8085-b77c53e0fd69', passwordVariable: 'ATATT3xFfGF0A4xLOweqmbnlw3X6mpVbsRF1GtenOIS64NLab4DVIT4lBHlR2F8t_0xfA1M63LR7TS1Fi3_M_IPoyAXNV-Vxdj1twD-2GmsSeIhhH3IqkmpL9yoDOAD8YqQShSpSF9OW4r8ttlUSWG717KRPGIXMWNE5SHbjBZ5aP2CRsSlt0EQ=ED677264', usernameVariable: 'manasvid')])
 {
                 def jiraUsername = 'manasvid' // Replace 'manasvid' with your Jira username
                 def jiraPasswordOrToken = 'ATATT3xFfGF0A4xLOweqmbnlw3X6mpVbsRF1GtenOIS64NLab4DVIT4lBHlR2F8t_0xfA1M63LR7TS1Fi3_M_IPoyAXNV-Vxdj1twD-2GmsSeIhhH3IqkmpL9yoDOAD8YqQShSpSF9OW4r8ttlUSWG717KRPGIXMWNE5SHbjBZ5aP2CRsSlt0EQ=ED677264' // Replace with your Jira password or API token
