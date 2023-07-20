@@ -15,8 +15,8 @@ void create_newjira_issue() {
                 ]
             ]
 
-            // Create the Jira issue using NewIssueStep
-            def response = new org.jenkinsci.plugins.jira.workflow.NewIssueStep(issue: NewJiraIssue, site: jiraURL, credentialsId: 'f4f6fc3b-b281-45b3-8085-b77c53e0fd69')
+            // Create the Jira issue using JiraNewIssueStep
+            def response = jiraNewIssue issue: NewJiraIssue, site: jiraURL, credentialsId: 'f4f6fc3b-b281-45b3-8085-b77c53e0fd69'
 
             echo response.successful.toString()
             echo response.data.toString()
