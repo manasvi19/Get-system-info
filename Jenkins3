@@ -24,7 +24,6 @@ void create_newjira_issue() {
             }
         }
     }
-}
 
 pipeline {
     agent any
