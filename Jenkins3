@@ -4,30 +4,26 @@ void create_newjira_issue() {
         stage('JIRA') {
             def jiraURL = 'https://manasvid.atlassian.net'
 
-            // Jira credentials
-            def jiraUsername = 'manasvid' // Replace with your Jira username
-            def jiraPasswordOrToken = '?N4viN:9!^~/G8F' 
+            // Authenticate with Jira using Jira username and password
+            withCredentials([usernamePassword(credentialsId: 'f4f6fc3b-b281-45b3-8085-b77c53e0fd69', passwordVariable: 'jiraPasswordOrToken', usernameVariable: 'jiraUsername')]) {
+                def jiraUsername = env.manasvid
+                def jiraPasswordOrToken = env.?N4viN:9!^~/g8F
 
-            def NewJiraIssue = [
-                fields: [
-                    project: [key: 'JT'],
-                    summary: 'Build Failed: Summary.',
-                    description: 'Description of JIRA ticket from Jenkins',
-                    issuetype: [name: 'Bug']
+                def NewJiraIssue = [
+                    fields: [
+                        project: [key: 'JT'],
+                        summary: 'Build Failed: Summary.',
+                        description: 'Description of JIRA ticket from Jenkins',
+                        issuetype: [name: 'Bug']
+                    ]
                 ]
-            ]
 
-            // Authenticate with Jira (choose the appropriate method below)
-            
-            // If using Jira username and password
-            withCredentials([usernamePassword(credentialsId: 'f4f6fc3b-b281-45b3-8085-b77c53e0fd69', passwordVariable: '?N4viN:9!^~/G8F', usernameVariable: 'manasvid')]) {
-                response = jiraNewIssue issue: NewJiraIssue, site: jiraURL, username: 'manasvid', password: '?N4viN:9!^~/G8F'
+                // Create the Jira issue
+                response = jiraNewIssue issue: NewJiraIssue, site: jiraURL, username: Manasvi Dhankani , password: jiraPasswordOrToken
+
+                echo response.successful.toString()
+                echo response.data.toString()
             }
-
-            
-
-            echo response.successful.toString()
-            echo response.data.toString()
         }
     }
 }
