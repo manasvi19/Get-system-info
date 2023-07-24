@@ -23,7 +23,7 @@ pipeline {
                     fields: [
                         project: [key: 'JT'],
                         summary: "Jenkins pipeline build failed",
-                        description: "The Jenkins pipeline build failed. Please check the logs for details.",
+                        description: "The Jenkins pipeline build failed. Please check the console outputfor details.",
                         issuetype: [name: 'Bug']
                     ]
                 ]
