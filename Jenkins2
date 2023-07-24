@@ -1,43 +1,38 @@
-// Function to create a new Jira issue
-void create_newjira_issue() {
-  node {
-    stage('JIRA') {
-      def jiraURL = 'https://manasvid.atlassian.net'
-      def NewJiraIssue = [fields: [project: [key: 'JT'],
-        summary: 'Build Failed : Summary.',
-        description: 'Description of JIRA ticket-from jenkins ',
-        issuetype: [name: 'Bug']]]
-
-      response = jiraNewIssue issue: NewJiraIssue, site:jiraURL
-
-      echo response.successful.toString()
-      echo response.data.toString()
-    }
-  }
-}
-
 pipeline {
-  agent any
+    agent any
 
-  stages {
-    stage('version') {
-      steps {
-        sh 'python3 --version'
-      }
+    stages {
+        stage('version') {
+            steps {
+                sh 'python3 --version'
+            }
+        }
+        stage('getinfo') {
+            steps {
+                // Run the Python script using the Anaconda Python interpreter
+                sh '/Users/manasvidhankani/opt/anaconda3/bin/python test.py'
+            }
+        }
     }
 
-    stage('getinfo') {
-      steps {
-        // Run the Python script using the Anaconda Python interpreter
-        sh '/Users/manasvidhankani/opt/anaconda3/bin/python test.py'
-      }
-    }
-  }
+    post {
+        failure {
+            script {
+                def jiraserver = 'Jira-jenkins-test'
+                def testIssue = [
+                    fields: [
+                        project: [key: 'JT'],
+                        summary: "Jenkins pipeline build failed",
+                        description: "The Jenkins pipeline build failed. Please check the logs for details.",
+                        issuetype: [name: 'Bug']
+                    ]
+                ]
+                def response = jiraNewIssue issue: testIssue, site: jiraserver
 
-  post {
-    failure {
-      // Create Jira issue if build fails
-      create_newjira_issue()
+                echo response.successful.toString()
+                echo response.data.toString()
+            }
+        }
     }
-  }
 }
+
