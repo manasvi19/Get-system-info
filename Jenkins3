@@ -1,43 +1,30 @@
-// Function to create a new Jira issue
-void create_newjira_issue() {
-  node {
-    stage('JIRA') {
-      def jiraURL = 'https://manasvid.atlassian.net'
-      def NewJiraIssue = [fields: [project: [key: 'JT'],
-        summary: 'Build Failed : Summary.',
-        description: 'Description of JIRA ticket-from Jenkins',
-        issuetype: [name: 'Bug']]]
-
-      response = jiraNewIssue issue: NewJiraIssue, site: jiraURL
-
-      echo response.successful.toString()
-      echo response.data.toString()
-    }
-  }
-}
-
 pipeline {
-  agent any
+    agent any
 
-  stages {
-    stage('version') {
-      steps {
-        sh 'python3 --version'
-      }
+    stages {
+        stage('version') {
+            steps {
+                sh 'python3 --version'
+            }
+        }
+
+        stage('getinfo') {
+            steps {
+                // Run the Python script using the Anaconda Python interpreter
+                sh '/Users/manasvidhankani/opt/anaconda3/bin/python test.py'
+            }
+        }
     }
 
-    stage('getinfo') {
-      steps {
-        // Run the Python script using the Anaconda Python interpreter
-        sh '/Users/manasvidhankani/opt/anaconda3/bin/python test.py'
-      }
+    post {
+        failure {
+            // Comment on Jira issue if build fails
+            steps {
+                script {
+                    jiraComment body: 'Build failed for this job.', issueKey: 'MD-8'
+                }
+            }
+        }
     }
-  }
-
-  post {
-    failure {
-      // Create Jira issue if build fails
-      create_newjira_issue()
-    }
-  }
 }
+
