@@ -19,12 +19,7 @@ pipeline {
     post {
         failure {
             // Comment on Jira issue if build fails
-            steps {
-                script {
-                    jiraComment body: 'Build failed for this job.', issueKey: 'MD-8'
-                }
-            }
+            jiraComment body: 'Build failed for this job.', issueKey: 'MD-8'
         }
     }
 }
-
