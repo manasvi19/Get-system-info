@@ -25,6 +25,7 @@ pipeline {
                         summary: "Jenkins pipeline build failed",
                         description: "The Jenkins pipeline build failed. Please check the console outputfor details.",
                         issuetype: [name: 'Bug']
+                        assignee: [name: manasvidh']
                     ]
                 ]
                 def response = jiraNewIssue issue: testIssue, site: jiraserver
