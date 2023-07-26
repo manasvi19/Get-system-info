@@ -24,7 +24,7 @@ pipeline {
                 def consoleOutput = currentBuild.rawBuild.getLog(1000).join('\n')
 
                 // Generate the Jenkins console output URL
-                def jenkinsUrl = 'http://http://localhost:8080/' 
+                def jenkinsUrl = 'http://localhost:8080/' 
                 def jobName = env.JOB_NAME
                 def buildNumber = env.BUILD_NUMBER
                 def consoleOutputUrl = "${jenkinsUrl}job/${jobName}/${buildNumber}/console"
