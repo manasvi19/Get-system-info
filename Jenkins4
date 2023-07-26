@@ -1,0 +1,55 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('version') {
+            steps {
+                sh 'python3 --version'
+            }
+        }
+        stage('getinfo') {
+            steps {
+                // Run the Python script using the Anaconda Python interpreter
+                sh '/Users/manasvidhankani/opt/anaconda3/bin/python test.py'
+            }
+        }
+    }
+
+    post {
+        failure {
+            script {
+                def jiraserver = 'Jira-jenkins-test'
+
+                // Access the Jenkins console output and store it in a variable
+                def consoleOutput = currentBuild.rawBuild.getLog(1000).join('\n')
+
+                // Generate the Jenkins console output URL
+                def jenkinsUrl = 'http://http://localhost:8080/' 
+                def jobName = env.JOB_NAME
+                def buildNumber = env.BUILD_NUMBER
+                def consoleOutputUrl = "${jenkinsUrl}job/${jobName}/${buildNumber}/console"
+
+                // Use a regular expression to find the NameError in the console output
+                def nameErrorMatch = consoleOutput =~ /NameError: ([^\n]+)/
+                def nameError = nameErrorMatch ? nameErrorMatch[0][1] : 'NameError not found in the Jenkins console output.'
+
+                def testIssue = [
+                    fields: [
+                        project: [key: 'JT'],
+                        summary: "Jenkins pipeline build failed for ${jobName} - Build #${buildNumber}",
+                        description: "The Jenkins pipeline build failed. Please check the console output for details.\n\nNameError: ${nameError}\n\n[Jenkins Console Output|${consoleOutputUrl}]",
+                        issuetype: [name: 'Bug'],
+                        assignee: 'johndoe03'
+                        //assignee: [name: 'manasvidh'] // Replace 'manasvidh' with the actual Jira username of the assignee
+                    ]
+                ]
+                
+                def response = jiraNewIssue issue: testIssue, site: jiraserver
+
+                echo response.successful.toString()
+                echo response.data.toString()
+            }
+        }
+    }
+}
+//comment for commmit.
