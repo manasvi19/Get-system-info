@@ -40,7 +40,6 @@ pipeline {
                         description: "The Jenkins pipeline build failed. Please check the console output for details.\n\nNameError: ${nameError}\n\n[Jenkins Console Output|${consoleOutputUrl}]",
                         issuetype: [name: 'Bug'],
                         assignee: 'johndoe03'
-                        //assignee: [name: 'manasvidh'] // Replace 'manasvidh' with the actual Jira username of the assignee
                     ]
                 ]
                 
