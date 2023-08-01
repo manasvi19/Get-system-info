@@ -115,5 +115,3 @@ for key, value in system_info.items():
         print(value)
     print('--' * 50)
 #end 
-# du -h --total /path/to/directory
-# du -h | sort -rh | awk '{percent=100*$1/'"$(du -sb /path/to/directory | awk'{print $1}')"';printf "%s\t%.1f%%n",$0,percent}'
