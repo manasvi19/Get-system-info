@@ -29,8 +29,8 @@ pipeline {
                 def buildNumber = env.BUILD_NUMBER
                 def consoleOutputUrl = "${jenkinsUrl}job/${jobName}/${buildNumber}/console"
 
-                // Use a regular expression to find the NameError in the console output
-                def nameErrorMatch = consoleOutput =~ /NameError: ([^\n]+)/
+                // Find the NameError in the console output
+                dFef nameErrorMatch = consoleOutput =~ /NameError: ([^\n]+)/
                 def nameError = nameErrorMatch ? nameErrorMatch[0][1] : 'NameError not found in the Jenkins console output.'
 
                 def testIssue = [
